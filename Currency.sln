@@ -1,57 +1,74 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Currency
+namespace Currency_3
 {
-    static class Program
+    public partial class Form1 : Form
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        public Form1()
         {
-            string fromCurrency = "EUR";
-            string toCurrency = "USD";
-            int amount = 1;
+            InitializeComponent();
+        }
 
-            //
-            // STEP 1 : Print all avaiable currencies on screen
-            //
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
+           
+            //Write a file
+            string[] text = { "Name :"+textBox1.Text };
+            System.IO.File.WriteAllLines(@"C:\Users\maham\source\repos\Currency-3\Currency-3\myfile.txt",text);
 
-            // Get all available currency tags
-            string[] availableCurrency = CurrencyConverter.GetCurrencyTags();
-            // Print currency tags comma seperated
-            Console.WriteLine("Available Currencies");
-            Console.WriteLine(string.Join(",", availableCurrency));
-            Console.WriteLine("\n");
 
-            //
-            // STEP 2 : Allow the User to input the currency rates
-            //
+            //TextWriter txt = new StreamWriter(@"C:\Users\maham\source\repos\Currency-3\Currency-3\myfile.txt");
+            //txt.Write(textBox1.Text);
+            
+            //Read a file
+            string read = System.IO.File.ReadAllText(@"C:\Users\maham\source\repos\Currency-3\Currency-3\myfile.txt");
+            
+            double amount = Convert.ToDouble(textBox2.Text);
 
-            Console.WriteLine("Insert Currency you want to convert FROM");
-            fromCurrency = Console.ReadLine();
-            Console.WriteLine("\n");
 
-            Console.WriteLine("Insert Currency you want to convert TO");
-            toCurrency = Console.ReadLine();
-            Console.WriteLine("\n");
+            // using the method 
+            string str = "Your amount to change is :"+ amount.ToString();
+            richTextBox1.AppendText(Environment.NewLine  + "\t" +  read +"\t"+str);
+          
 
-            //
-            // STEP 3 : Calculate and display the currency exchange rate
-            //
+            double EURO = 91.14, DOLLAR = 80.23, YUAN = 0.085,Rouble =0;
+            if (radioButton1.Checked)
+            {
+                Rouble += amount * EURO;
+                richTextBox1.AppendText(Environment.NewLine  + "\t"+"Your money in rouble:" + Rouble +"\t" + DateTime.Now.ToString("HH:mm:ss")+"\n");
 
-            // Calls a method to get the exchange rate between 2 currencies
-            float exchangeRate = CurrencyConverter.GetExchangeRate(fromCurrency, toCurrency, amount);
-            // Print result of currency exchange
-            Console.WriteLine("FROM " + amount + " " + fromCurrency.ToUpper() + " TO " + toCurrency.ToUpper() + " = " + exchangeRate);
+            }
+            else if (radioButton2.Checked)
+            {
+                Rouble += amount * DOLLAR;
+                richTextBox1.AppendText(Environment.NewLine   + "\t" + "Your money in rouble:" + Rouble + "\t" + DateTime.Now.ToString("HH:mm:ss") + "\n");
+            }
+            else 
+            {
+                Rouble += amount * YUAN;
+                richTextBox1.AppendText(Environment.NewLine + "\t" + "Your money in rouble:" + Rouble + "\t" + DateTime.Now.ToString("HH:mm:ss") + "\n");
 
-            // Wait for key press to close console window
-            Console.ReadLine();
+            }
+            richTextBox1.SaveFile(@"C:\Users\maham\source\repos\Currency-3\Currency-3\myfile.txt", RichTextBoxStreamType.RichText );
+            
+
+            this.Controls.Add(richTextBox1);
+         
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
